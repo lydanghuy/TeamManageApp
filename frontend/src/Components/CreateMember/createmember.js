@@ -50,7 +50,7 @@ export default class CreateMember extends Component {
   
     render() {
       return (
-        <div className="container Login">
+        <div className="container">
           <form onSubmit={this.handleSubmit}>
           <FormGroup className="mx-auto" style={style} controlId="name" bsSize="large">
               <ControlLabel>Name</ControlLabel>
