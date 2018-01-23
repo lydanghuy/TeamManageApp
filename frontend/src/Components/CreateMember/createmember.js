@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 import {Route, Link} from 'react-router-dom'
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import axios from 'axios'
+var style={
+  width: '500px',
 
+}
 export default class CreateMember extends Component {
     constructor(props) {
       super(props);
   
       this.state = {
         name: "",
-        phone: "",
-        project: ""
+        phone: ""
       };
     }
 
     validateForm() {
-      return this.state.name.length>0 && this.state.phone.length > 9 && this.state.project.length > 0;
+      return this.state.name.length>0 && this.state.phone.length > 9 && this.state.phone.length <12;
     }
     handleChange = event => {
       this.setState({
@@ -22,24 +25,22 @@ export default class CreateMember extends Component {
       });
     }
 
-    async register(){
-      let response = await fetch('/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.state)
-      });
-      let responseJSON = await response.json();
-    
-      if (responseJSON.success) {
-        alert("success");
-        window.location.assign("https://motorbikeforum.herokuapp.com/login")
-        // console.log(userid);
-        // console.log(localStorage.getItem("userID"));
-      }
-      else alert("Your username has been already registered.")
+    register(){
+      axios({
+        method: 'post',
+        url: "/api/members/createMember",
+        data: this.state
+      })
+      .then((response)=>{
+        alert(response.data.message);
+        console.log(response.data.message);
+        window.location.assign("http://localhost:3000/");
+
+      })
+      .catch((error)=>{
+        alert(error.response.data.err);
+        console.log(error.response.data.err);
+      })
     }
 
     handleSubmit = event => {
@@ -51,26 +52,26 @@ export default class CreateMember extends Component {
       return (
         <div className="container Login">
           <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="name" bsSize="large">
+          <FormGroup className="mx-auto" style={style} controlId="name" bsSize="large">
               <ControlLabel>Name</ControlLabel>
               <FormControl
                 autoFocus
-                type="textt"
+                type="text"
                 value={this.state.name}
                 onChange={this.handleChange}
               />
             </FormGroup>
             
-            <FormGroup controlId="phone" bsSize="large">
+            <FormGroup className="mx-auto" style={style} controlId="phone" bsSize="large">
               <ControlLabel>Phone</ControlLabel>
               <FormControl
-                
                 type="number"
                 value={this.state.phone}
                 onChange={this.handleChange}
+                placeholder="09xxxxxxxx"
               />
             </FormGroup>
-            <Button className="su-btn button"
+            <Button style={style} className="su-btn mx-auto button"
               block
               bsSize="large"
               disabled={!this.validateForm()}

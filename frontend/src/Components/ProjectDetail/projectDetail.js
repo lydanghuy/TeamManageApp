@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+var style1={
+    'text-align':'center',
+}
 export default class ProjectDetail extends Component{
     constructor(props){
         super(props);
@@ -37,20 +40,25 @@ export default class ProjectDetail extends Component{
             data: {
                 "phone": this.state.assignPhone.toString()
             }
-        }).then(window.location.reload);
+        }).then(window.location.reload)
+        .catch((error)=>{
+            console.log(error.response);
+            alert(error.response.data.err);
+           
+        })
     }
 
     render(){
         
         var memberList=this.state.listMember.map((members)=>{
-            return <p>{members._id}</p>;
+            return <p>{members.memberName.name} - {members.memberName.phone}</p>;
         })
         return(
-            <div>
-                <p>Project Name: {this.state.detail.projectName}</p>
-                <p>List Member:{memberList}</p> 
+            <div style={style1} className="mt-5 mr-5">
+                <p><strong>Project Name:</strong> {this.state.detail.projectName}</p>
+                <p><strong>List Member:</strong>{memberList}</p> 
                 <form>
-                    <p>Assign new member</p>
+                    <p><strong>Assign new member</strong></p>
                     <input id="assignPhone" type="number" value={this.state.assignPhone} onChange={this.handleChange} placeholder="09xxxxxxxxx" />
                     <button type="submit" disabled={!this.validate()} onClick={this.assign.bind(this)}>Assign</button>
                 </form>

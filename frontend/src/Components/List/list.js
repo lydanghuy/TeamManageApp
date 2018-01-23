@@ -28,7 +28,7 @@ export default class List extends Component{
             return <tr className="d-flex">{cells}</tr>;
           });
         return(
-            <div className="container justify-content-center">
+            <div className="container">
             <table className="table">
                 <thead>
                     <tr className="d-flex">

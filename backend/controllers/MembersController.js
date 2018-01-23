@@ -33,6 +33,8 @@ var Project = require('../models/project');
 router.post('/createMember', (req, res, next) => {
   Member.findOne({ phone: req.body.phone}).exec(function (err, result) {
     if(result){
+      res.statusCode = 409;
+      res.setHeader('Content-Type','application/json');
       return res.json({success: false, err:"Phone exists"});
     }
     else{
@@ -53,39 +55,5 @@ router.post('/createMember', (req, res, next) => {
   });
 });
 
-/**     2)
-         * api/members/searchMember:
-         *   method: post
-         *     tags:
-         *       - Members Controllers
-         *     description: Search available members
-         *     produces:
-         *       - application/json
-         *     parameters:
-         *       - name: projectCreator
-         *         type: String
-         *         required: true
-         *         schema:
-         *            memberSchema
-         *     resultss:
-         *       200:
-         *         description: Show members to add
-**/
-router.route('/:searchMember').get(function(req,res){
-
-  var searchResults=[];
-  Member.find({},function(err,results){
-    for (var i=0;i< results.length;i++){
-        var memberName = results[i].username.toLowerCase();
-
-      if (memberName.indexOf(req.params.searchMember.split("&").join(" ")) != -1){
-        searchResults.push(results[i]);
-      }
-    }
-    res.statusCode = 200;
-    res.setHeader('Content-Type','application/json');
-    res.json(searchResults);
-  });
-});
 
 module.exports = router;

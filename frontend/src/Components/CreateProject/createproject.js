@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import {Route, Link} from 'react-router-dom'
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
+import axios from 'axios'
+var style={
+  width: '500px',
 
+}
 export default class CreateProject extends Component {
     constructor(props) {
       super(props);
@@ -20,24 +24,16 @@ export default class CreateProject extends Component {
       });
     }
 
-    async register(){
-      let response = await fetch('/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+    register(){
+      axios({
+        method: 'post',
+        data:{
+          'projectName': this.state.name
         },
-        body: JSON.stringify(this.state)
-      });
-      let responseJSON = await response.json();
-    
-      if (responseJSON.success) {
-        alert("success");
-        window.location.assign("https://motorbikeforum.herokuapp.com/login")
-        // console.log(userid);
-        // console.log(localStorage.getItem("userID"));
-      }
-      else alert("Your username has been already registered.")
+        url: "/api/projects"
+      }).then((response)=>{
+        window.location.assign("http://localhost:3000/projects/"+response.data.project._id)
+      })
     }
 
     handleSubmit = event => {
@@ -49,7 +45,7 @@ export default class CreateProject extends Component {
       return (
         <div className="container Login">
           <form onSubmit={this.handleSubmit}>
-          <FormGroup controlId="name" bsSize="large">
+          <FormGroup className="mx-auto" style={style} controlId="name" bsSize="large">
               <ControlLabel>Project Name</ControlLabel>
               <FormControl
                 autoFocus
@@ -59,7 +55,7 @@ export default class CreateProject extends Component {
               />
             </FormGroup>
             
-            <Button className="su-btn mx-auto button"
+            <Button style={style} className="su-btn mx-auto button"
               block
               bsSize="large"
               disabled={!this.validateForm()}
