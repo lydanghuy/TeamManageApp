@@ -28,5 +28,4 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //api
 app.use('/api/members', members);
 app.use('/api/projects', projects);
-
 module.exports = app;
