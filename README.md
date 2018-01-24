@@ -4,4 +4,4 @@
 + Show project detail (name, list member)
 + Assign member to project
 
-
+This app is deployed on heroku: https://teammanageapp.herokuapp.com
